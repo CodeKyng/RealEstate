@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import { Bed, Bath, Maximize, MapPin } from "lucide-react"
 import type { Listing } from "@/types"
-import { Button } from "@/components/ui/button"
 
 interface Props {
   listing: Listing
