@@ -40,7 +40,21 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
-async function ensureUserProfile(user: User): Promise<UserProfile> {
+/** Firestore rejects `undefined` field values — strip them before write. */
+function stripUndefined<T extends Record<string, unknown>>(obj: T): T {
+  const out = { ...obj }
+  for (const key of Object.keys(out)) {
+    if (out[key] === undefined) {
+      delete out[key]
+    }
+  }
+  return out
+}
+
+async function ensureUserProfile(
+  user: User,
+  overrides?: Partial<Pick<UserProfile, "displayName" | "photoURL">>
+): Promise<UserProfile> {
   const ref = doc(db, "users", user.uid)
   const snap = await getDoc(ref)
 
@@ -51,19 +65,26 @@ async function ensureUserProfile(user: User): Promise<UserProfile> {
   const profile: UserProfile = {
     uid: user.uid,
     email: user.email ?? "",
-    displayName: user.displayName ?? "User",
-    photoURL: user.photoURL ?? undefined,
+    displayName: overrides?.displayName ?? user.displayName ?? "User",
     role: "user",
     isBanned: false,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   }
 
-  await setDoc(ref, {
-    ...profile,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  })
+  const photoURL = overrides?.photoURL ?? user.photoURL
+  if (photoURL) {
+    profile.photoURL = photoURL
+  }
+
+  await setDoc(
+    ref,
+    stripUndefined({
+      ...profile,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    })
+  )
 
   return profile
 }
@@ -104,7 +125,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, displayName: string) => {
     const cred = await createUserWithEmailAndPassword(auth, email, password)
     await updateProfile(cred.user, { displayName })
-    await ensureUserProfile(cred.user)
+    // Pass displayName explicitly — Auth user may not reflect updateProfile yet
+    await ensureUserProfile(cred.user, { displayName })
   }
 
   const signIn = async (email: string, password: string) => {
