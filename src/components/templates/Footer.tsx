@@ -1,59 +1,72 @@
-import facebook from "../../assets/facebook.png"
-import linkedin from "../../assets/linkedin.png"
-import twitter from "../../assets/twitter.png"
+import { Link } from "react-router-dom"
+import { Home } from "lucide-react"
 
-function Footer() {
+export default function Footer() {
   return (
-    <div className="bg-gray-950 p-6 text-[#fcfcfc]">
-      <h1 className="m-4 text-xl font-bold">HavenHub</h1>
-      <div className="flex flex-col justify-around gap-8 p-6 sm:flex-row">
-        <div>
-          <p className="max-w-xs">
-            Lorem ipsum dolor sitametco nsectet ur. Ultrices diamcmm odo odio
-            tellus eget. Lorem
-          </p>
-          <div className="m-2 flex gap-4">
-            <img
-              src={facebook}
-              alt="Facebook"
-              className="h-[30px] w-[30px] rounded-lg bg-gray-50 p-1"
-            />
-            <img
-              src={linkedin}
-              alt="LinkedIn"
-              className="h-[30px] w-[30px] rounded-lg bg-gray-50 p-1"
-            />
-            <img
-              src={twitter}
-              alt="Twitter"
-              className="h-[30px] w-[30px] rounded-lg bg-gray-50 p-1"
-            />
+    <footer className="border-t bg-card">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link to="/" className="mb-3 flex items-center gap-2 font-semibold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                <Home className="h-4 w-4" />
+              </span>
+              HavenHub
+            </Link>
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Modern marketplace for homes across Nigeria. Search, list, and manage
+              with confidence.
+            </p>
+          </div>
+          <div>
+            <p className="mb-3 text-sm font-semibold">Explore</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/listings" className="hover:text-foreground">
+                  Browse homes
+                </Link>
+              </li>
+              <li>
+                <Link to="/create-listing" className="hover:text-foreground">
+                  List a property
+                </Link>
+              </li>
+              <li>
+                <Link to="/signup" className="hover:text-foreground">
+                  Create account
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="mb-3 text-sm font-semibold">Account</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/login" className="hover:text-foreground">
+                  Log in
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="hover:text-foreground">
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="mb-3 text-sm font-semibold">Company</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>About</li>
+              <li>Help center</li>
+              <li>Contact</li>
+            </ul>
           </div>
         </div>
-        <div>
-          <ul>
-            <li>Contact US</li>
-            <li>About US</li>
-            <li>Help</li>
-            <li>View More</li>
-            <li>Customer Supports</li>
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <li>Our Services</li>
-            <li>Our Reviews</li>
-            <li>Our Team</li>
-            <li>Pricing</li>
-            <li>Benefits</li>
-          </ul>
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs text-muted-foreground sm:flex-row">
+          <p>© {new Date().getFullYear()} HavenHub. All rights reserved.</p>
+          <p>Built for renters & landlords</p>
         </div>
       </div>
-      <h1 className="m-2 text-center text-lg font-bold">
-        Copyright 2023 HavenHub. All rights reserved.
-      </h1>
-    </div>
+    </footer>
   )
 }
-
-export default Footer

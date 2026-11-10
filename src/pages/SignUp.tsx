@@ -1,31 +1,34 @@
-import logo from "/logo.png"
-
+import { Link } from "react-router-dom"
+import { Home } from "lucide-react"
 import { SignupForm } from "@/components/signup-form"
 
 export default function SignUp() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-center gap-2 md:justify-start">
-          <a href="/" className="flex items-center gap-2 font-medium">
-            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <img src={logo} className="size-4" />
-            </div>
-            HavenHub
-          </a>
-        </div>
+        <Link to="/" className="flex items-center gap-2 font-semibold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <Home className="h-4 w-4" />
+          </span>
+          HavenHub
+        </Link>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
+          <div className="w-full max-w-sm">
             <SignupForm />
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-black/50 lg:block">
-        <img
-          src="/hero.png"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
+      <div className="relative hidden overflow-hidden bg-primary lg:block">
+        <div className="hh-grid absolute inset-0 opacity-20" />
+        <div className="absolute inset-0 flex flex-col justify-end p-12 text-primary-foreground">
+          <p className="mb-2 text-sm font-medium opacity-80">Join HavenHub</p>
+          <h2 className="max-w-md text-3xl font-semibold tracking-tight">
+            Create an account. List your first home.
+          </h2>
+          <p className="mt-3 max-w-sm text-sm opacity-80">
+            Posting your first listing automatically makes you a landlord.
+          </p>
+        </div>
       </div>
     </div>
   )

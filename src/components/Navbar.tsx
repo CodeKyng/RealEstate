@@ -1,5 +1,14 @@
 import { Link, useNavigate } from "react-router-dom"
-import { Home, Search, PlusCircle, LayoutDashboard, Shield, LogOut, Menu, X } from "lucide-react"
+import {
+  Home,
+  Search,
+  PlusCircle,
+  LayoutDashboard,
+  Shield,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react"
 import { useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
@@ -14,44 +23,36 @@ export function Navbar() {
     navigate("/")
   }
 
+  const linkClass =
+    "inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2 text-lg font-bold">
-          <Home className="h-5 w-5" />
-          HavenHub
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-15 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" style={{ height: "3.75rem" }}>
+        <Link to="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm shadow-primary/25">
+            <Home className="h-4 w-4" />
+          </span>
+          <span className="text-base">HavenHub</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          <Link
-            to="/listings"
-            className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
-          >
+        <nav className="hidden items-center gap-0.5 md:flex">
+          <Link to="/listings" className={linkClass}>
             <Search className="h-4 w-4" />
             Browse
           </Link>
-
           {user && (
             <>
-              <Link
-                to="/create-listing"
-                className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
-              >
+              <Link to="/create-listing" className={linkClass}>
                 <PlusCircle className="h-4 w-4" />
-                List Property
+                List
               </Link>
-              <Link
-                to="/dashboard"
-                className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
-              >
+              <Link to="/dashboard" className={linkClass}>
                 <LayoutDashboard className="h-4 w-4" />
                 Dashboard
               </Link>
               {isAdmin && (
-                <Link
-                  to="/admin"
-                  className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
-                >
+                <Link to="/admin" className={linkClass}>
                   <Shield className="h-4 w-4" />
                   Admin
                 </Link>
@@ -63,30 +64,29 @@ export function Navbar() {
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <>
-              <span className="text-sm text-muted-foreground">
-                {profile?.displayName ?? user.email}
+              <div className="mr-1 flex items-center gap-2 rounded-full border bg-card px-3 py-1.5">
+                <span className="max-w-[120px] truncate text-sm font-medium">
+                  {profile?.displayName ?? user.email}
+                </span>
                 {(isLandlord || isAdmin) && (
-                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-xs capitalize text-primary">
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
                     {profile?.role}
                   </span>
                 )}
-              </span>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="mr-1 h-4 w-4" />
+              </div>
+              <Button variant="outline" size="sm" className="rounded-lg" onClick={handleLogout}>
+                <LogOut className="mr-1.5 h-3.5 w-3.5" />
                 Logout
               </Button>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="inline-flex h-7 items-center rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
-              >
+              <Link to="/login" className={linkClass}>
                 Log in
               </Link>
               <Link
                 to="/signup"
-                className="inline-flex h-7 items-center rounded-lg bg-primary px-2.5 text-[0.8rem] font-medium text-primary-foreground hover:bg-primary/80"
+                className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
               >
                 Sign up
               </Link>
@@ -97,7 +97,7 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="rounded-lg md:hidden"
           onClick={() => setOpen(!open)}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -105,62 +105,42 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t px-4 py-3 md:hidden">
-          <div className="flex flex-col gap-1">
-            <Link
-              to="/listings"
-              className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-              onClick={() => setOpen(false)}
-            >
-              Browse Listings
+        <div className="border-t bg-background px-4 py-3 md:hidden">
+          <div className="flex flex-col gap-0.5">
+            <Link to="/listings" className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted" onClick={() => setOpen(false)}>
+              Browse listings
             </Link>
             {user ? (
               <>
-                <Link
-                  to="/create-listing"
-                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                  onClick={() => setOpen(false)}
-                >
-                  List Property
+                <Link to="/create-listing" className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted" onClick={() => setOpen(false)}>
+                  List property
                 </Link>
-                <Link
-                  to="/dashboard"
-                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                  onClick={() => setOpen(false)}
-                >
+                <Link to="/dashboard" className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted" onClick={() => setOpen(false)}>
                   Dashboard
                 </Link>
                 {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                    onClick={() => setOpen(false)}
-                  >
+                  <Link to="/admin" className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted" onClick={() => setOpen(false)}>
                     Admin
                   </Link>
                 )}
                 <button
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-muted"
+                  className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-destructive hover:bg-muted"
                   onClick={() => {
                     handleLogout()
                     setOpen(false)
                   }}
                 >
-                  <LogOut className="h-4 w-4" /> Logout
+                  Logout
                 </button>
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                  onClick={() => setOpen(false)}
-                >
+                <Link to="/login" className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted" onClick={() => setOpen(false)}>
                   Log in
                 </Link>
                 <Link
                   to="/signup"
-                  className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground"
+                  className="mt-1 rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-medium text-primary-foreground"
                   onClick={() => setOpen(false)}
                 >
                   Sign up
