@@ -6,7 +6,6 @@ import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { ListingCard } from "@/components/listings/ListingCard"
 import { useAuth } from "@/contexts/AuthContext"
 import { getListingsByOwner } from "@/lib/listings"
-import { Button } from "@/components/ui/button"
 import type { Listing } from "@/types"
 
 function DashboardContent() {
@@ -37,12 +36,13 @@ function DashboardContent() {
               )}
             </p>
           </div>
-          <Button asChild>
-            <Link to="/create-listing">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              List a property
-            </Link>
-          </Button>
+          <Link
+            to="/create-listing"
+            className="inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+          >
+            <PlusCircle className="h-4 w-4" />
+            List a property
+          </Link>
         </div>
 
         <section>
@@ -62,9 +62,12 @@ function DashboardContent() {
               <p className="mb-4 text-sm text-muted-foreground">
                 Post your first property and become a landlord automatically.
               </p>
-              <Button asChild>
-                <Link to="/create-listing">Create listing</Link>
-              </Button>
+              <Link
+                to="/create-listing"
+                className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
+              >
+                Create listing
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

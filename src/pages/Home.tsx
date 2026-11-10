@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom"
-import { Mail, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import HeroImg from "../assets/HeroImg.png"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Field } from "@/components/ui/field"
 import look from "../assets/look.png"
 import room1 from "../assets/room1.png"
 import room2 from "../assets/room2.png"
@@ -25,18 +24,23 @@ function Home() {
                 Find your next home on HavenHub
               </h1>
               <p className="mb-6 max-w-md text-center text-[#fcfcfc]/90">
-                Browse thousands of rentals and homes for sale. List your property and become a landlord in minutes.
+                Browse thousands of rentals and homes for sale. List your property
+                and become a landlord in minutes.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Button asChild size="lg" className="rounded-full bg-white text-black hover:bg-white/90">
-                  <Link to="/listings">
-                    <Search className="mr-2 h-5 w-5" />
-                    Browse homes
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white/10">
-                  <Link to="/create-listing">List your property</Link>
-                </Button>
+                <Link
+                  to="/listings"
+                  className="inline-flex h-10 items-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-black hover:bg-white/90"
+                >
+                  <Search className="h-5 w-5" />
+                  Browse homes
+                </Link>
+                <Link
+                  to="/create-listing"
+                  className="inline-flex h-10 items-center rounded-full border border-white px-5 text-sm font-medium text-white hover:bg-white/10"
+                >
+                  List your property
+                </Link>
               </div>
             </div>
             <img
@@ -48,23 +52,23 @@ function Home() {
         </div>
       </div>
 
-      {/* Quick search strip */}
       <div className="border-b bg-card">
         <div className="mx-auto flex max-w-4xl flex-col items-stretch gap-3 p-4 sm:flex-row sm:items-center">
-          <Input placeholder="City or keyword (e.g. Lagos, Lekki)" className="flex-1" id="home-search" />
-          <Button asChild>
-            <Link
-              to="/listings"
-              onClick={(e) => {
-                const input = document.getElementById("home-search") as HTMLInputElement
-                if (input?.value) {
-                  e.preventDefault()
-                  window.location.href = `/listings?q=${encodeURIComponent(input.value)}`
-                }
-              }}
-            >
-              <Search className="mr-2 h-4 w-4" /> Search
-            </Link>
+          <Input
+            placeholder="City or keyword (e.g. Lagos, Lekki)"
+            className="flex-1"
+            id="home-search"
+          />
+          <Button
+            onClick={() => {
+              const input = document.getElementById("home-search") as HTMLInputElement
+              const q = input?.value?.trim()
+              window.location.href = q
+                ? `/listings?q=${encodeURIComponent(q)}`
+                : "/listings"
+            }}
+          >
+            <Search className="mr-2 h-4 w-4" /> Search
           </Button>
         </div>
       </div>
@@ -80,13 +84,16 @@ function Home() {
             Your one-stop destination for homes
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Welcome to HavenHub. Whether you're looking for a rental apartment
+            Welcome to HavenHub. Whether you&apos;re looking for a rental apartment
             or ready to list your property, we make it simple. Create an account,
             post your first listing, and automatically become a landlord.
           </p>
-          <Button asChild className="mt-6">
-            <Link to="/listings">Explore listings</Link>
-          </Button>
+          <Link
+            to="/listings"
+            className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+          >
+            Explore listings
+          </Link>
         </div>
       </div>
 
@@ -135,9 +142,12 @@ function Home() {
             <img src={room3} alt="room3" className="w-[150px] rounded-lg" />
             <img src={room4} alt="room4" className="w-[150px] rounded-lg" />
           </div>
-          <Button asChild variant="outline" className="mt-2">
-            <Link to="/listings">View all homes</Link>
-          </Button>
+          <Link
+            to="/listings"
+            className="mt-2 inline-flex h-9 items-center rounded-lg border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
+            View all homes
+          </Link>
         </div>
         <img
           src={look}
@@ -151,13 +161,16 @@ function Home() {
           Become a landlord today
         </h1>
         <p className="max-w-xl text-center text-muted-foreground">
-          Create a free account, post your first property, and you'll
+          Create a free account, post your first property, and you&apos;ll
           automatically get landlord access. Listings are reviewed by our team
           before going live.
         </p>
-        <Button asChild size="lg">
-          <Link to="/create-listing">List a property</Link>
-        </Button>
+        <Link
+          to="/create-listing"
+          className="inline-flex h-10 items-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+        >
+          List a property
+        </Link>
       </div>
 
       <Footer />

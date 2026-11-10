@@ -65,9 +65,12 @@ export default function ListingDetail() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
         <p>Listing not found</p>
-        <Button asChild>
-          <Link to="/listings">Back to listings</Link>
-        </Button>
+        <Link
+          to="/listings"
+          className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
+        >
+          Back to listings
+        </Link>
       </div>
     )
   }
@@ -78,13 +81,13 @@ export default function ListingDetail() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-        <Button variant="ghost" size="sm" asChild className="mb-4">
-          <Link to="/listings">
-            <ArrowLeft className="mr-1 h-4 w-4" /> Back
-          </Link>
-        </Button>
+        <Link
+          to="/listings"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back
+        </Link>
 
-        {/* Image gallery */}
         <div className="mb-6 overflow-hidden rounded-xl">
           <img
             src={images[activeImage]}
@@ -159,7 +162,9 @@ export default function ListingDetail() {
               <p className="text-3xl font-bold">
                 {formatPrice(listing.price, listing.currency)}
               </p>
-              <p className="text-sm text-muted-foreground">Listed by {listing.ownerName}</p>
+              <p className="text-sm text-muted-foreground">
+                Listed by {listing.ownerName}
+              </p>
 
               <Button className="mt-4 w-full" size="lg">
                 Contact landlord
@@ -176,7 +181,9 @@ export default function ListingDetail() {
               )}
 
               {reportMsg && (
-                <p className="mt-2 text-center text-sm text-muted-foreground">{reportMsg}</p>
+                <p className="mt-2 text-center text-sm text-muted-foreground">
+                  {reportMsg}
+                </p>
               )}
             </div>
           </div>
@@ -207,7 +214,11 @@ export default function ListingDetail() {
                   onChange={(e) => setReportDesc(e.target.value)}
                 />
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" onClick={() => setReportOpen(false)}>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => setReportOpen(false)}
+                  >
                     Cancel
                   </Button>
                   <Button

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { Home, Search, PlusCircle, LayoutDashboard, Shield, LogOut, User, Menu, X } from "lucide-react"
+import { Home, Search, PlusCircle, LayoutDashboard, Shield, LogOut, Menu, X } from "lucide-react"
 import { useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
@@ -17,40 +17,44 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2 font-bold text-lg">
+        <Link to="/" className="flex items-center gap-2 text-lg font-bold">
           <Home className="h-5 w-5" />
           HavenHub
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/listings">
-              <Search className="mr-1 h-4 w-4" />
-              Browse
-            </Link>
-          </Button>
+          <Link
+            to="/listings"
+            className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+          >
+            <Search className="h-4 w-4" />
+            Browse
+          </Link>
 
           {user && (
             <>
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/create-listing">
-                  <PlusCircle className="mr-1 h-4 w-4" />
-                  List Property
-                </Link>
-              </Button>
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/dashboard">
-                  <LayoutDashboard className="mr-1 h-4 w-4" />
-                  Dashboard
-                </Link>
-              </Button>
+              <Link
+                to="/create-listing"
+                className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+              >
+                <PlusCircle className="h-4 w-4" />
+                List Property
+              </Link>
+              <Link
+                to="/dashboard"
+                className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+              </Link>
               {isAdmin && (
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/admin">
-                    <Shield className="mr-1 h-4 w-4" />
-                    Admin
-                  </Link>
-                </Button>
+                <Link
+                  to="/admin"
+                  className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+                >
+                  <Shield className="h-4 w-4" />
+                  Admin
+                </Link>
               )}
             </>
           )}
@@ -61,8 +65,8 @@ export function Navbar() {
             <>
               <span className="text-sm text-muted-foreground">
                 {profile?.displayName ?? user.email}
-                {isLandlord && (
-                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-xs text-primary">
+                {(isLandlord || isAdmin) && (
+                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-xs capitalize text-primary">
                     {profile?.role}
                   </span>
                 )}
@@ -74,12 +78,18 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">Log in</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/signup">Sign up</Link>
-              </Button>
+              <Link
+                to="/login"
+                className="inline-flex h-7 items-center rounded-lg px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/signup"
+                className="inline-flex h-7 items-center rounded-lg bg-primary px-2.5 text-[0.8rem] font-medium text-primary-foreground hover:bg-primary/80"
+              >
+                Sign up
+              </Link>
             </>
           )}
         </div>
@@ -97,34 +107,64 @@ export function Navbar() {
       {open && (
         <div className="border-t px-4 py-3 md:hidden">
           <div className="flex flex-col gap-1">
-            <Button variant="ghost" className="justify-start" asChild onClick={() => setOpen(false)}>
-              <Link to="/listings">Browse Listings</Link>
-            </Button>
+            <Link
+              to="/listings"
+              className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+              onClick={() => setOpen(false)}
+            >
+              Browse Listings
+            </Link>
             {user ? (
               <>
-                <Button variant="ghost" className="justify-start" asChild onClick={() => setOpen(false)}>
-                  <Link to="/create-listing">List Property</Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild onClick={() => setOpen(false)}>
-                  <Link to="/dashboard">Dashboard</Link>
-                </Button>
+                <Link
+                  to="/create-listing"
+                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                  onClick={() => setOpen(false)}
+                >
+                  List Property
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                  onClick={() => setOpen(false)}
+                >
+                  Dashboard
+                </Link>
                 {isAdmin && (
-                  <Button variant="ghost" className="justify-start" asChild onClick={() => setOpen(false)}>
-                    <Link to="/admin">Admin</Link>
-                  </Button>
+                  <Link
+                    to="/admin"
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    onClick={() => setOpen(false)}
+                  >
+                    Admin
+                  </Link>
                 )}
-                <Button variant="ghost" className="justify-start" onClick={() => { handleLogout(); setOpen(false) }}>
-                  <LogOut className="mr-2 h-4 w-4" /> Logout
-                </Button>
+                <button
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-muted"
+                  onClick={() => {
+                    handleLogout()
+                    setOpen(false)
+                  }}
+                >
+                  <LogOut className="h-4 w-4" /> Logout
+                </button>
               </>
             ) : (
               <>
-                <Button variant="ghost" className="justify-start" asChild onClick={() => setOpen(false)}>
-                  <Link to="/login">Log in</Link>
-                </Button>
-                <Button className="justify-start" asChild onClick={() => setOpen(false)}>
-                  <Link to="/signup">Sign up</Link>
-                </Button>
+                <Link
+                  to="/login"
+                  className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                  onClick={() => setOpen(false)}
+                >
+                  Log in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign up
+                </Link>
               </>
             )}
           </div>
