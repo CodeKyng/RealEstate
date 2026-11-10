@@ -2,14 +2,11 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import {
   Search,
-  Home as HomeIcon,
-  Shield,
-  Sparkles,
+  ArrowUpRight,
   MapPin,
-  ArrowRight,
-  Building2,
-  KeyRound,
-  BadgeCheck,
+  Bed,
+  Bath,
+  ChevronRight,
 } from "lucide-react"
 import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
@@ -21,38 +18,51 @@ import room3 from "../assets/room3.png"
 import room4 from "../assets/room4.png"
 import scape1 from "../assets/scape1.png"
 import scape2 from "../assets/scape2.png"
-import scape3 from "../assets/scape3.png"
+import look from "../assets/look.png"
 
-const FEATURED = [
-  { img: room1, title: "Modern Lekki Flat", price: "₦2.4M", meta: "3 bd · 2 ba · Lagos" },
-  { img: room2, title: "Ikoyi Waterfront", price: "₦8.1M", meta: "4 bd · 3 ba · Lagos" },
-  { img: room3, title: "Abuja Studio", price: "₦900K", meta: "1 bd · 1 ba · Abuja" },
-  { img: room4, title: "Victoria Island Penthouse", price: "₦12M", meta: "5 bd · 4 ba · Lagos" },
+const CITIES = [
+  { name: "Lagos", count: "1.2k listings", img: scape1 },
+  { name: "Abuja", count: "430 listings", img: scape2 },
+  { name: "Port Harcourt", count: "210 listings", img: room3 },
+  { name: "Ibadan", count: "180 listings", img: room4 },
 ]
 
-const STEPS = [
+const HOMES = [
   {
-    icon: Search,
-    title: "Discover homes",
-    body: "Filter by city, price, beds, and amenities. Every listing is reviewed before it goes live.",
+    img: room1,
+    title: "3-bed duplex · Lekki Phase 1",
+    price: "₦4,500,000",
+    period: "/ year",
+    beds: 3,
+    baths: 3,
+    tag: "New",
   },
   {
-    icon: KeyRound,
-    title: "List in minutes",
-    body: "Post your first property and you automatically become a landlord on HavenHub.",
+    img: room2,
+    title: "Serviced flat · Ikoyi",
+    price: "₦8,200,000",
+    period: "/ year",
+    beds: 2,
+    baths: 2,
+    tag: "Furnished",
   },
   {
-    icon: BadgeCheck,
-    title: "Trusted & moderated",
-    body: "Admins approve listings and handle reports so the marketplace stays clean.",
+    img: room3,
+    title: "Studio · Wuse II Abuja",
+    price: "₦1,100,000",
+    period: "/ year",
+    beds: 1,
+    baths: 1,
+    tag: null,
   },
 ]
 
 export default function Home() {
   const [q, setQ] = useState("")
+  const [tab, setTab] = useState<"rent" | "sale">("rent")
   const navigate = useNavigate()
 
-  const search = () => {
+  const go = () => {
     navigate(q.trim() ? `/listings?q=${encodeURIComponent(q.trim())}` : "/listings")
   }
 
@@ -60,216 +70,274 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b">
-        <div className="hh-grid pointer-events-none absolute inset-0 opacity-60" />
-        <div className="hh-glow pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 pb-20 pt-16 text-center sm:px-6 sm:pt-24">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-            <Sparkles className="h-3.5 w-3.5" />
-            Nigeria&apos;s modern rental marketplace
-          </div>
-          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Find a place you&apos;ll{" "}
-            <span className="bg-gradient-to-r from-primary to-teal-600 bg-clip-text text-transparent">
-              actually love
-            </span>
-          </h1>
-          <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Browse verified homes, list your property in minutes, and manage everything
-            from one calm dashboard.
-          </p>
+      {/* Asymmetric hero — product, not pitch deck */}
+      <section className="border-b">
+        <div className="mx-auto grid max-w-6xl gap-0 lg:grid-cols-12">
+          {/* Left copy + search */}
+          <div className="flex flex-col justify-center px-4 py-12 sm:px-6 lg:col-span-5 lg:py-20">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              HavenHub · Nigeria
+            </p>
+            <h1 className="text-[2.35rem] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
+              Homes you can
+              <br />
+              actually move into.
+            </h1>
+            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
+              Search verified rentals and sales. List a property and you become a
+              landlord the moment it posts.
+            </p>
 
-          {/* Search pill */}
-          <div className="mt-10 w-full max-w-2xl rounded-2xl border bg-card/80 p-2 shadow-lg shadow-primary/5 backdrop-blur">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            {/* Rent / Sale toggle */}
+            <div className="mt-8 inline-flex w-fit rounded-full border bg-muted/60 p-1">
+              {(["rent", "sale"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTab(t)}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition-colors ${
+                    tab === t
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  For {t}
+                </button>
+              ))}
+            </div>
+
+            {/* Search */}
+            <div className="mt-4 flex gap-2">
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && search()}
-                  placeholder="City, neighborhood, or keyword…"
-                  className="h-11 border-0 bg-transparent pl-9 shadow-none focus-visible:ring-0"
+                  onKeyDown={(e) => e.key === "Enter" && go()}
+                  placeholder="Area, street, estate…"
+                  className="h-12 rounded-xl border-border/80 bg-card pl-9 text-[15px]"
                 />
               </div>
-              <Button size="lg" className="h-11 shrink-0 rounded-xl px-6" onClick={search}>
-                <Search className="mr-2 h-4 w-4" />
-                Search homes
+              <Button
+                size="lg"
+                className="h-12 shrink-0 rounded-xl px-5"
+                onClick={go}
+              >
+                <Search className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Search</span>
               </Button>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+              <span className="text-foreground/70">Try</span>
+              {["Lekki", "Yaba", "Gwarinpa", "Victoria Island"].map((c) => (
+                <Link
+                  key={c}
+                  to={`/listings?q=${c}`}
+                  className="underline-offset-4 hover:text-primary hover:underline"
+                >
+                  {c}
+                </Link>
+              ))}
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
-            <span>Popular:</span>
-            {["Lagos", "Abuja", "Lekki", "Port Harcourt"].map((city) => (
+          {/* Right — stacked property collage */}
+          <div className="relative lg:col-span-7">
+            <div className="grid h-full min-h-[320px] grid-cols-2 gap-2 p-4 sm:gap-3 sm:p-6 lg:min-h-[520px] lg:p-8">
+              <div className="relative row-span-2 overflow-hidden rounded-2xl">
+                <img
+                  src={look}
+                  alt="Featured home"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white sm:p-5">
+                  <p className="text-xs font-medium uppercase tracking-wider text-white/70">
+                    Featured · Lagos
+                  </p>
+                  <p className="mt-1 text-lg font-semibold leading-snug">
+                    Waterfront 4-bed on Banana Island
+                  </p>
+                  <p className="mt-2 text-sm text-white/85">₦25M / year</p>
+                </div>
+              </div>
+              <div className="relative overflow-hidden rounded-2xl">
+                <img src={room1} alt="" className="h-full w-full object-cover" />
+              </div>
+              <div className="relative overflow-hidden rounded-2xl">
+                <img src={room2} alt="" className="h-full w-full object-cover" />
+                <div className="absolute bottom-3 left-3 rounded-lg bg-card/95 px-2.5 py-1 text-xs font-semibold backdrop-blur">
+                  From ₦850k
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* City strip — horizontal, editorial */}
+      <section className="border-b bg-card">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+          <div className="mb-5 flex items-baseline justify-between">
+            <h2 className="text-lg font-semibold tracking-tight">Browse by city</h2>
+            <Link
+              to="/listings"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              All cities
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {CITIES.map((city) => (
               <Link
-                key={city}
-                to={`/listings?q=${city}`}
-                className="rounded-full border bg-card px-3 py-1 transition-colors hover:border-primary/40 hover:text-primary"
+                key={city.name}
+                to={`/listings?q=${city.name}`}
+                className="group relative aspect-[5/3] overflow-hidden rounded-xl"
               >
-                {city}
+                <img
+                  src={city.img}
+                  alt={city.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-3 text-white">
+                  <p className="font-semibold">{city.name}</p>
+                  <p className="text-xs text-white/75">{city.count}</p>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats strip */}
-      <section className="border-b bg-card">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 sm:grid-cols-4 sm:px-6">
-          {[
-            { label: "Homes listed", value: "2,400+" },
-            { label: "Cities", value: "18" },
-            { label: "Landlords", value: "890+" },
-            { label: "Avg. response", value: "< 2 hrs" },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                {s.value}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured grid */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="mb-8 flex items-end justify-between gap-4">
+      {/* Live-style listings row */}
+      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              Featured homes
-            </h2>
-            <p className="mt-1 text-muted-foreground">
-              Hand-picked listings across Nigeria
+            <h2 className="text-2xl font-semibold tracking-tight">Just listed</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Fresh inventory · moderated before it goes public
             </p>
           </div>
           <Link
             to="/listings"
-            className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:inline-flex"
+            className="hidden items-center gap-1 text-sm font-medium text-foreground hover:text-primary sm:inline-flex"
           >
-            View all <ArrowRight className="h-4 w-4" />
+            See marketplace
+            <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURED.map((f) => (
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {HOMES.map((h) => (
             <Link
-              key={f.title}
+              key={h.title}
               to="/listings"
-              className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className="group overflow-hidden rounded-2xl border bg-card transition-shadow hover:shadow-md"
             >
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden">
                 <img
-                  src={f.img}
-                  alt={f.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  src={h.img}
+                  alt={h.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
+                {h.tag && (
+                  <span className="absolute left-3 top-3 rounded-md bg-card px-2 py-0.5 text-[11px] font-semibold">
+                    {h.tag}
+                  </span>
+                )}
               </div>
               <div className="p-4">
-                <p className="font-semibold">{f.title}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground">{f.meta}</p>
-                <p className="mt-2 text-lg font-semibold text-primary">{f.price}</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-lg font-semibold tracking-tight">{h.price}</span>
+                  <span className="text-sm text-muted-foreground">{h.period}</span>
+                </div>
+                <p className="mt-1 text-[15px] font-medium leading-snug">{h.title}</p>
+                <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Bed className="h-3.5 w-3.5" /> {h.beds}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Bath className="h-3.5 w-3.5" /> {h.baths}
+                  </span>
+                </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Bento how it works */}
-      <section className="border-y bg-muted/40">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="mb-10 text-center">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              Built for renters & landlords
-            </h2>
-            <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
-              A clean flow from search to listing — inspired by the best modern product UIs.
+      {/* Split landlord band — concrete, not fluffy */}
+      <section className="border-y">
+        <div className="mx-auto grid max-w-6xl lg:grid-cols-2">
+          <div className="flex flex-col justify-center border-b px-4 py-14 sm:px-6 lg:border-b-0 lg:border-r lg:px-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              For owners
             </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {STEPS.map((step, i) => (
-              <div
-                key={step.title}
-                className="rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
-              >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <step.icon className="h-5 w-5" />
-                </div>
-                <p className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Step {i + 1}
-                </p>
-                <h3 className="text-lg font-semibold">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {step.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Large visual CTA */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid overflow-hidden rounded-3xl border bg-card shadow-sm lg:grid-cols-2">
-          <div className="flex flex-col justify-center p-8 sm:p-12">
-            <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
-              <Building2 className="h-3.5 w-3.5" />
-              For property owners
-            </div>
-            <h2 className="text-3xl font-semibold tracking-tight">
-              List your first home.{" "}
-              <span className="text-primary">Become a landlord.</span>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              Post once.
+              <br />
+              Get approved.
+              <br />
+              Go live.
             </h2>
-            <p className="mt-3 text-muted-foreground">
-              Upload photos, set your price, and submit for review. Once approved,
-              your listing is live for thousands of seekers.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <ul className="mt-6 space-y-3 text-[15px] text-muted-foreground">
+              <li className="flex gap-3">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                First listing unlocks landlord access automatically
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                Admin review before anything hits the public feed
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                Photos, amenities, and pricing in one form
+              </li>
+            </ul>
+            <div className="mt-8">
               <Link
                 to="/create-listing"
-                className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                className="inline-flex h-11 items-center gap-2 rounded-xl bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
               >
                 List a property
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/signup"
-                className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-medium hover:bg-muted"
-              >
-                Create free account
+                <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 p-4 sm:p-6">
-            <img src={scape1} alt="" className="h-full min-h-[180px] rounded-2xl object-cover" />
-            <div className="grid gap-2">
-              <img src={scape2} alt="" className="h-full min-h-[90px] rounded-2xl object-cover" />
-              <img src={scape3} alt="" className="h-full min-h-[90px] rounded-2xl object-cover" />
-            </div>
+          <div className="relative min-h-[280px] lg:min-h-0">
+            <img
+              src={scape1}
+              alt="Property"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
           </div>
         </div>
       </section>
 
-      {/* Trust */}
-      <section className="border-t bg-card">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-14 text-center sm:px-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Shield className="h-6 w-6" />
-          </div>
-          <h2 className="max-w-md text-2xl font-semibold tracking-tight">
-            Moderated listings. Real people. Clear roles.
-          </h2>
-          <p className="max-w-lg text-muted-foreground">
-            Users, landlords, and admins each have the right tools — from report flows
-            to approval queues — so HavenHub stays trustworthy.
-          </p>
+      {/* Bottom CTA — tight */}
+      <section className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6">
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Stop scrolling random WhatsApp groups.
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+          Use a real marketplace — search, filter, report bad listings, and talk to
+          landlords who actually posted here.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/listings"
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="inline-flex h-11 items-center rounded-xl bg-primary px-6 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            <HomeIcon className="h-4 w-4" />
-            Start browsing
+            Open the marketplace
+          </Link>
+          <Link
+            to="/signup"
+            className="inline-flex h-11 items-center rounded-xl border px-6 text-sm font-medium hover:bg-muted"
+          >
+            Create account
           </Link>
         </div>
       </section>
