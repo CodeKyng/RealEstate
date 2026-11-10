@@ -1,8 +1,14 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
+import { AuthProvider } from "@/contexts/AuthContext"
 import Home from "./pages/Home"
 import Subscribe from "./pages/Subscribe"
-import  SignUp from "./pages/SignUp"
-import  Login from "./pages/Login"
+import SignUp from "./pages/SignUp"
+import Login from "./pages/Login"
+import Listings from "./pages/Listings"
+import ListingDetail from "./pages/ListingDetail"
+import CreateListing from "./pages/CreateListing"
+import Dashboard from "./pages/Dashboard"
+import Admin from "./pages/Admin"
 
 function NotFound() {
   return (
@@ -23,15 +29,22 @@ function NotFound() {
 
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/subscribe" element={<Subscribe />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/subscribe" element={<Subscribe />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/listings" element={<Listings />} />
+          <Route path="/listings/:id" element={<ListingDetail />} />
+          <Route path="/create-listing" element={<CreateListing />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
