@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { Check, X, Ban, Shield, Flag } from "lucide-react"
-import { Navbar } from "@/components/Navbar"
+import { Check, X, Ban, Flag } from "lucide-react"
+import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { useAuth } from "@/contexts/AuthContext"
 import { getPendingListings, updateListingStatus } from "@/lib/listings"
@@ -108,14 +108,8 @@ function AdminContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="mb-6 flex items-center gap-2">
-          <Shield className="h-6 w-6" />
-          <h1 className="text-2xl font-bold">Admin panel</h1>
-        </div>
-
+    <DashboardLayout title="Admin panel">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <div className="mb-6 flex gap-2 border-b">
           {tabs.map((t) => (
             <button
@@ -302,7 +296,7 @@ function AdminContent() {
           </>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
 
