@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { PlusCircle } from "lucide-react"
-import { Navbar } from "@/components/Navbar"
+import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { ListingCard } from "@/components/listings/ListingCard"
 import { useAuth } from "@/contexts/AuthContext"
@@ -21,28 +21,29 @@ function DashboardContent() {
   }, [profile])
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Welcome back, {profile?.displayName}
-              {profile?.role && (
-                <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs capitalize text-primary">
-                  {profile.role}
-                </span>
-              )}
-            </p>
-          </div>
-          <Link
-            to="/create-listing"
-            className="inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/80"
-          >
-            <PlusCircle className="h-4 w-4" />
-            List a property
-          </Link>
+    <DashboardLayout
+      title="Dashboard"
+      actions={
+        <Link
+          to="/create-listing"
+          className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm shadow-primary/20 hover:bg-primary/90"
+        >
+          <PlusCircle className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">List a property</span>
+        </Link>
+      }
+    >
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+        <div className="mb-6">
+          <p className="text-muted-foreground">
+            Welcome back,{" "}
+            <span className="font-medium text-foreground">{profile?.displayName}</span>
+            {profile?.role && (
+              <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs capitalize text-primary">
+                {profile.role}
+              </span>
+            )}
+          </p>
         </div>
 
         <section>
@@ -78,7 +79,7 @@ function DashboardContent() {
           )}
         </section>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
 
