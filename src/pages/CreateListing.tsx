@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Navbar } from "@/components/Navbar"
+import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { useAuth } from "@/contexts/AuthContext"
 import { createListing, PROPERTY_TYPES, AMENITIES } from "@/lib/listings"
@@ -91,10 +91,8 @@ function CreateListingForm() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-        <h1 className="mb-2 text-2xl font-bold">List your property</h1>
+    <DashboardLayout title="List your property">
+      <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
         <p className="mb-6 text-muted-foreground">
           Your listing will be reviewed by an admin before it goes live.
           {profile?.role === "user" && (
@@ -281,7 +279,7 @@ function CreateListingForm() {
           </Button>
         </form>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
 
